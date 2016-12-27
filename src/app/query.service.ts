@@ -70,4 +70,21 @@ export class QueryService {
     return [null, queryString];
   }
 
+  /**
+   * Appends the provided query-part to the query-string and returns the combined query-string.
+   *
+   * @param categories
+   * @param queryString
+   * @param appendPart
+   */
+  public appendQueryPartToQueryString(categories: Array<QueryCategory>, queryString: string, appendPart: QueryPart) {
+    let lastPart: QueryPart, remainingQueryString: string;
+    [lastPart, remainingQueryString] = this.popLastQueryPartFromString(categories, queryString);
+    if(!lastPart || lastPart.category != appendPart.category) remainingQueryString = queryString;
+    let newQuery = remainingQueryString.length > 0 ? remainingQueryString + " " : remainingQueryString;
+    newQuery += appendPart.category.name + this.categoryValueSeparator + appendPart.value;
+    newQuery += appendPart.value.length > 0 ? " " : "";
+    return newQuery;
+  }
+
 }

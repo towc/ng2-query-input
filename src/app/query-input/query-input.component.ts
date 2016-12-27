@@ -54,4 +54,13 @@ export class QueryInputComponent implements OnInit {
     // Return the result of the callback
     return this.delegate.getAutocompleteSuggestions(lastQueryPart);
   }
+
+  /**
+   * Appends the provided part to the current query
+   *
+   * @param part
+   */
+  appendQueryPart(part: QueryPart) {
+    this.queryString = this.queryService.appendQueryPartToQueryString(this.categories, this.queryString, part);
+  }
 }

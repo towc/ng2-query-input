@@ -9,5 +9,5 @@
 
 <p>Suggestions:</p>
 <ul>
-  <li *ngFor="let queryPart of getAutocompleteSuggestions()">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>
+  <li *ngFor="let queryPart of getAutocompleteSuggestions()" (click)="appendQueryPart(queryPart)">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>
 </ul>
