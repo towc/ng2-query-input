@@ -19,7 +19,11 @@ export class QueryInputComponent implements OnInit {
   @Input() delegate: QueryInputDelegate;
   @Output() queryCalled = new EventEmitter();
 
-  private selectedSuggestion = -1;
+  private suggestionsVisible: boolean = false;
+  private selectedSuggestion: number = -1;
+
+  private lastSuggestions: Array<QueryPart> = null;
+  private lastSuggestionsQueryString: string = null;
 
   constructor(private queryService: QueryService) { }
 
@@ -50,13 +54,18 @@ export class QueryInputComponent implements OnInit {
   getAutocompleteSuggestions(): Array<QueryPart> {
     if(!this.delegate) return [];
 
+    // Check if autocomplete needs to be updated or can be returned from cache
+    if(this.queryString == this.lastSuggestionsQueryString) return this.lastSuggestions;
+
     // Fetch the last query-part to be passed to the suggestions-callback
     let currentQuery = this.getQuery();
     let parts = currentQuery.parts;
     let lastQueryPart = parts.length > 0 ? parts[parts.length - 1] : new QueryPart(null, "");
 
     // Return the result of the callback
-    return this.delegate.getAutocompleteSuggestions(lastQueryPart);
+    this.lastSuggestionsQueryString = this.queryString;
+    this.lastSuggestions = this.delegate.getAutocompleteSuggestions(lastQueryPart);
+    return this.lastSuggestions;
   }
 
   /**
@@ -69,20 +78,28 @@ export class QueryInputComponent implements OnInit {
   }
 
   /**
-   * Retuns true if the input for the query-string is focused
-   * @returns {boolean}
+   * Performs multiple keyboard-actions when the suggestions are visible:
+   *  - Move selection with up- and down-arrow
+   *  - Trigger query-called-event when the enter-button is pressed and no suggestion is selected
+   *  - Hide the suggestions with the esc-key
+   *
+   * @param event
    */
-  isQueryStringInputFocused(): boolean {
-    return document.activeElement == this.queryStringInput.nativeElement;
-  }
-
   @HostListener('window:keydown', ['$event'])
-  keyboardListener(event: any) {
-    if(!this.isQueryStringInputFocused()) return;
+  keyboardListener(event: KeyboardEvent) {
+
+    // Reenable suggestions of the input is focused
+    if(document.activeElement == this.queryStringInput.nativeElement) {
+      this.suggestionsVisible = true;
+    }
+
+    // Perform actions only if suggestions are visible
+    if(!this.suggestionsVisible) return;
 
     const upKeyCode = 38;
     const downKeyCode = 40;
     const enterKeyCode = 13;
+    const escKeyCode = 27;
 
     let suggestions = this.getAutocompleteSuggestions();
 
@@ -95,18 +112,40 @@ export class QueryInputComponent implements OnInit {
     if(this.selectedSuggestion < -1) this.selectedSuggestion = -1;
 
     // Perform select on enter
-    if(event.keyCode == enterKeyCode && this.selectedSuggestion != -1) {
-      this.appendQueryPart(suggestions[this.selectedSuggestion]);
-      this.selectedSuggestion = -1;
+    if(event.keyCode == enterKeyCode) {
+      if(this.selectedSuggestion == -1) {
+        this.enterHandler();
+      } else {
+        this.appendQueryPart(suggestions[this.selectedSuggestion]);
+        this.selectedSuggestion = -1;
+      }
+    }
+
+    // Hide suggestions on esc
+    if(event.keyCode == escKeyCode) {
+      this.suggestionsVisible = false;
     }
   }
 
-  /*@HostListener('window:click', ['$event'])
-  clickListener(event: any) {
-    console.log(this.queryInputWrapper.nativeElement.contains(event.toElement));
-  }*/
+  /**
+   * Shows or hides suggestions based on clicks on it or other elements
+   * @param event
+   */
+  @HostListener('window:click', ['$event'])
+  clickListener(event: MouseEvent) {
+    this.suggestionsVisible = this.queryInputWrapper.nativeElement.contains(event.toElement);
+  }
 
+  /**
+   * Sets the index of the selected suggestion
+   *
+   * @param suggestion
+   */
   selectSuggestion(suggestion: number) {
+    // Mark the selection
     this.selectedSuggestion = suggestion;
+
+    // Todo: Make sure the input remains focused
+    this.queryStringInput.nativeElement.focus();
   }
 }

@@ -1,3 +1,3 @@
 <div class="wrapper">
-  <query-input [(categories)]="categories" [(delegate)]="queryInputDelegate"></query-input>
+  <query-input [(categories)]="categories" [(delegate)]="queryInputDelegate" (queryCalled)="queryCalled($event)"></query-input>
 </div>

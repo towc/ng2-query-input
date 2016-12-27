@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {QueryCategory} from "./query-category";
 import {QueryPart} from "./query-part";
 import {QueryInputDelegate} from "./query-input-delegate";
+import {Query} from "./query";
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,8 @@ export class AppComponent implements QueryInputDelegate{
    * @returns {Array<QueryPart>}
    */
   getAutocompleteSuggestions(currentValue: QueryPart): Array<QueryPart> {
+    console.log("Suggestions-fetch");
+
     let suggestions: Array<QueryPart> = [];
 
     // Show category-suggestions only if no category is selected or the value has more than one word
@@ -67,5 +70,14 @@ export class AppComponent implements QueryInputDelegate{
     }
 
     return suggestions;
+  }
+
+  /**
+   * Todo
+   *
+   * @param query
+   */
+  queryCalled(query: Query) {
+    console.log(query);
   }
 }

@@ -1,8 +1,8 @@
 <div class="query-input-wrapper" #queryInputWrapper>
   <div class="input">
-    <input type="text" [(ngModel)]="queryString" (click)="isQueryStringInputFocused()" #queryStringInput>
+    <input type="text" [(ngModel)]="queryString" #queryStringInput>
   </div>
-  <div class="suggestions" [hidden]="!isQueryStringInputFocused()">
+  <div class="suggestions" [hidden]="!suggestionsVisible">
     <ul>
       <li class="suggestion"
           *ngFor="let queryPart of getAutocompleteSuggestions(); let index=index"
