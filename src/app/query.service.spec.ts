@@ -47,4 +47,14 @@ describe('QueryService', () => {
     expect(someQuery.parts[1].value).toEqual("Ipsum");
     expect(someQuery.parts[2].value).toEqual("Something with whitespaces");
   }));
+
+  it('should not fail for empty input', inject([QueryService], (service: QueryService) => {
+    let someCategories: Array<QueryCategory> = [];
+    let someQueryString = "";
+
+    let someQuery: Query = service.getQueryFromString(someCategories, someQueryString);
+
+    // Check existance
+    expect(someQuery).not.toBeNull();
+  }));
 });

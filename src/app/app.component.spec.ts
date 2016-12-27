@@ -2,13 +2,19 @@
 
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import {QueryInputComponent} from "./query-input/query-input.component";
+import {FormsModule} from "@angular/forms";
+import {QueryService} from "./query.service";
 
 describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [ FormsModule ],
       declarations: [
-        AppComponent
+        AppComponent,
+        QueryInputComponent
       ],
+      providers: [QueryService]
     });
     TestBed.compileComponents();
   });
@@ -17,18 +23,5 @@ describe('AppComponent', () => {
     let fixture = TestBed.createComponent(AppComponent);
     let app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  }));
-
-  it(`should have as title 'app works!'`, async(() => {
-    let fixture = TestBed.createComponent(AppComponent);
-    let app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app works!');
-  }));
-
-  it('should render title in a h1 tag', async(() => {
-    let fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    let compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('app works!');
   }));
 });

@@ -5,7 +5,7 @@ export class QueryPart {
   value: string;
 
   constructor(category?: QueryCategory, value?: string) {
-    if(category) this.category = category;
-    if(value) this.value = value;
+    if(typeof category !== 'undefined') this.category = category;
+    if(typeof value !== 'undefined') this.value = value;
   }
 }
