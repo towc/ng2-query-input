@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { QueryInputComponent } from './query-input/query-input.component';
-import {QueryService} from "./query.service";
+import {QueryService} from "./query-input/query.service";
 
 @NgModule({
   declarations: [

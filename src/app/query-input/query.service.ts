@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {Query} from "./query";
-import {QueryCategory} from "./query-category";
-import {QueryPart} from "./query-part";
+import {Query} from "./model/query";
+import {QueryCategory} from "./model/query-category";
+import {QueryPart} from "./model/query-part";
 
 @Injectable()
 export class QueryService {

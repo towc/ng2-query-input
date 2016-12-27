@@ -1,9 +1,9 @@
 import {Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef} from '@angular/core';
-import {Query} from "../query";
-import {QueryCategory} from "../query-category";
-import {QueryService} from "../query.service";
-import {QueryPart} from "../query-part";
-import {QueryInputDelegate} from "../query-input-delegate";
+import {Query} from "./model/query";
+import {QueryCategory} from "./model/query-category";
+import {QueryService} from "./query.service";
+import {QueryPart} from "./model/query-part";
+import {QueryInputDelegate} from "./model/query-input-delegate";
 
 @Component({
   selector: 'query-input',

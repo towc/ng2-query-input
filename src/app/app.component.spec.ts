@@ -4,7 +4,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import {QueryInputComponent} from "./query-input/query-input.component";
 import {FormsModule} from "@angular/forms";
-import {QueryService} from "./query.service";
+import {QueryService} from "./query-input/query.service";
 
 describe('AppComponent', () => {
   beforeEach(() => {

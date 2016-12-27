@@ -2,9 +2,9 @@
 
 import { TestBed, async, inject } from '@angular/core/testing';
 import { QueryService } from './query.service';
-import {QueryCategory} from "./query-category";
-import {Query} from "./query";
-import {QueryPart} from "./query-part";
+import {QueryCategory} from "./model/query-category";
+import {Query} from "./model/query";
+import {QueryPart} from "./model/query-part";
 
 describe('QueryService', () => {
   beforeEach(() => {
