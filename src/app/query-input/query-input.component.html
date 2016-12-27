@@ -1,4 +1,4 @@
-<div #queryInputWrapper>
+<div class="query-input-wrapper" #queryInputWrapper>
   <div class="input">
     <input type="text" [(ngModel)]="queryString" (click)="isQueryStringInputFocused()" #queryStringInput>
   </div>
@@ -9,14 +9,14 @@
           [ngClass]="index == selectedSuggestion ? 'selected' : ''"
           (mouseover)="selectSuggestion(index)"
           (click)="appendQueryPart(queryPart)">
-        <div class="category-name">{{ queryPart.category ? queryPart.category.name : "" }}</div>
+        <div class="category-name">{{ queryPart.category ? queryPart.category.name : "" }}:</div>
         <div class="value">{{ queryPart.value }}</div>
         <div class="category-description">{{ queryPart.category ? queryPart.category.description : "" }}</div>
       </li>
     </ul>
   </div>
 
-
+  <p>&nbsp;</p>
   <p>Current Query:</p>
   <ul>
     <li *ngFor="let queryPart of getQuery().parts">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>

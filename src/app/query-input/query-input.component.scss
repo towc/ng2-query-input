@@ -1,0 +1,47 @@
+input {
+  width: 100%;
+  padding: 5px;
+}
+
+.suggestions {
+  position: relative;
+
+  ul {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+
+    .suggestion {
+      display: flex;
+      align-items: center;
+      width: 360px;
+      height: 20px;
+      padding: 5px;
+
+      .category-name {
+        width: 60px;
+        flex-grow: 0;
+        font-size: 80%;
+      }
+
+      .value {
+        flex-grow: 1;
+      }
+
+      .category-description {
+        width: 100px;
+        flex-grow: 0;
+        font-size: 80%;
+        text-align: right;
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+.selected {
+  background-color: #f00;
+}

@@ -8,7 +8,7 @@ import {QueryInputDelegate} from "../query-input-delegate";
 @Component({
   selector: 'query-input',
   templateUrl: './query-input.component.html',
-  styleUrls: ['./query-input.component.css']
+  styleUrls: ['./query-input.component.scss']
 })
 export class QueryInputComponent implements OnInit {
 
