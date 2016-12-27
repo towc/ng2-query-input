@@ -53,7 +53,7 @@ export class QueryService {
     let lastCategoryIndex = -1;
 
     for(let category of categories) {
-      let categoryIndex = queryString.indexOf(category.name + this.categoryValueSeparator);
+      let categoryIndex = queryString.lastIndexOf(category.name + this.categoryValueSeparator);
       if(categoryIndex > lastCategoryIndex) {
         lastCategory = category;
         lastCategoryIndex = categoryIndex;

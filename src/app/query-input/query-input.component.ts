@@ -3,6 +3,7 @@ import {Query} from "../query";
 import {QueryCategory} from "../query-category";
 import {QueryService} from "../query.service";
 import {QueryPart} from "../query-part";
+import {QueryInputDelegate} from "../query-input-delegate";
 
 @Component({
   selector: 'query-input',
@@ -13,7 +14,7 @@ export class QueryInputComponent implements OnInit {
 
   @Input() categories: Array<QueryCategory> = [];
   @Input() queryString: string = "";
-  @Input() autocompleteSuggestions: (queryPart: QueryPart) => Array<QueryPart> = () => [];
+  @Input() delegate: QueryInputDelegate;
   @Output() queryCalled = new EventEmitter();
 
   constructor(private queryService: QueryService) { }
@@ -38,18 +39,19 @@ export class QueryInputComponent implements OnInit {
   }
 
   /**
-   * Todo
+   * Fetches the autocomplete-suggestions from the delegate and returns them
    *
    * @returns {Array<QueryPart>}
    */
   getAutocompleteSuggestions(): Array<QueryPart> {
+    if(!this.delegate) return [];
 
     // Fetch the last query-part to be passed to the suggestions-callback
     let currentQuery = this.getQuery();
-    let lastQueryPart = currentQuery.parts.length > 0 ? currentQuery.parts[0] : new QueryPart(null, "");
+    let parts = currentQuery.parts;
+    let lastQueryPart = parts.length > 0 ? parts[parts.length - 1] : new QueryPart(null, "");
 
     // Return the result of the callback
-    return this.autocompleteSuggestions(lastQueryPart);
+    return this.delegate.getAutocompleteSuggestions(lastQueryPart);
   }
-
 }

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import {QueryCategory} from "./query-category";
 import {QueryPart} from "./query-part";
+import {QueryInputDelegate} from "./query-input-delegate";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements QueryInputDelegate{
 
   // Dummy-categories
   categories: Array<QueryCategory> = [];
@@ -16,11 +17,20 @@ export class AppComponent {
   types: Array<string> = ["ABC", "DEF", "XYZ"];
   names: Array<string> = ["Something", "Something more", "Different one"];
 
+  // Define the delegate for the autocomplete
+  queryInputDelegate: QueryInputDelegate = this;
+
   constructor() {
     this.categories.push(new QueryCategory("Type", "Lorem ipsum"));
     this.categories.push(new QueryCategory("Name", "Dolor sit"));
   }
 
+  /**
+   * Generates autocomplete-suggestions
+   *
+   * @param currentValue
+   * @returns {Array<QueryPart>}
+   */
   getAutocompleteSuggestions(currentValue: QueryPart): Array<QueryPart> {
     let suggestions: Array<QueryPart> = [];
 
@@ -37,8 +47,6 @@ export class AppComponent {
       }
     }
 
-
-    /* Todo: Wrong "this"...
     // Show value-suggestions defending on the selected category
     switch(currentValue.category) {
       case this.categories[0]:
@@ -57,7 +65,6 @@ export class AppComponent {
         }
         break;
     }
-    */
 
     return suggestions;
   }
