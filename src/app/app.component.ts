@@ -51,7 +51,7 @@ export class AppComponent implements QueryInputDelegate{
     switch(currentValue.category) {
       case this.categories[0]:
         for(let type of this.types) {
-          if(type.startsWith(currentValue.value)) {
+          if(type.startsWith(currentValue.value) && type != currentValue.value) {
             suggestions.push(new QueryPart(currentValue.category, type));
           }
         }
@@ -59,7 +59,7 @@ export class AppComponent implements QueryInputDelegate{
 
       case this.categories[1]:
         for(let name of this.names) {
-          if(name.startsWith(currentValue.value)) {
+          if(name.startsWith(currentValue.value) && name != currentValue.value) {
             suggestions.push(new QueryPart(currentValue.category, name));
           }
         }

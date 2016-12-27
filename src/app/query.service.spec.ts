@@ -83,10 +83,10 @@ describe('QueryService', () => {
     // Value append
     someQueryPart = new QueryPart(someCategories[2], "Some Value");
     someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
-    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Some Value ");
+    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Some Value");
 
     someQueryPart = new QueryPart(someCategories[3], "Some Value");
     someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
-    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Something with whitespaces Four: Some Value ");
+    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Something with whitespaces Four: Some Value");
   }));
 });

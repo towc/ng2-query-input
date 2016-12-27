@@ -1,13 +1,25 @@
-<p>
-  <input type="text" [(ngModel)]="queryString">
-</p>
+<div #queryInputWrapper>
+  <div class="input">
+    <input type="text" [(ngModel)]="queryString" (click)="isQueryStringInputFocused()" #queryStringInput>
+  </div>
+  <div class="suggestions" [hidden]="!isQueryStringInputFocused()">
+    <ul>
+      <li class="suggestion"
+          *ngFor="let queryPart of getAutocompleteSuggestions(); let index=index"
+          [ngClass]="index == selectedSuggestion ? 'selected' : ''"
+          (mouseover)="selectSuggestion(index)"
+          (click)="appendQueryPart(queryPart)">
+        <div class="category-name">{{ queryPart.category ? queryPart.category.name : "" }}</div>
+        <div class="value">{{ queryPart.value }}</div>
+        <div class="category-description">{{ queryPart.category ? queryPart.category.description : "" }}</div>
+      </li>
+    </ul>
+  </div>
 
-<p>Current Query:</p>
-<ul>
-  <li *ngFor="let queryPart of getQuery().parts">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>
-</ul>
 
-<p>Suggestions:</p>
-<ul>
-  <li *ngFor="let queryPart of getAutocompleteSuggestions()" (click)="appendQueryPart(queryPart)">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>
-</ul>
+  <p>Current Query:</p>
+  <ul>
+    <li *ngFor="let queryPart of getQuery().parts">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>
+  </ul>
+
+</div>

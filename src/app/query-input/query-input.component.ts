@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef} from '@angular/core';
 import {Query} from "../query";
 import {QueryCategory} from "../query-category";
 import {QueryService} from "../query.service";
@@ -12,10 +12,14 @@ import {QueryInputDelegate} from "../query-input-delegate";
 })
 export class QueryInputComponent implements OnInit {
 
+  @ViewChild('queryStringInput') queryStringInput: ElementRef;
+  @ViewChild('queryInputWrapper') queryInputWrapper: ElementRef;
   @Input() categories: Array<QueryCategory> = [];
   @Input() queryString: string = "";
   @Input() delegate: QueryInputDelegate;
   @Output() queryCalled = new EventEmitter();
+
+  private selectedSuggestion = -1;
 
   constructor(private queryService: QueryService) { }
 
@@ -62,5 +66,47 @@ export class QueryInputComponent implements OnInit {
    */
   appendQueryPart(part: QueryPart) {
     this.queryString = this.queryService.appendQueryPartToQueryString(this.categories, this.queryString, part);
+  }
+
+  /**
+   * Retuns true if the input for the query-string is focused
+   * @returns {boolean}
+   */
+  isQueryStringInputFocused(): boolean {
+    return document.activeElement == this.queryStringInput.nativeElement;
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  keyboardListener(event: any) {
+    if(!this.isQueryStringInputFocused()) return;
+
+    const upKeyCode = 38;
+    const downKeyCode = 40;
+    const enterKeyCode = 13;
+
+    let suggestions = this.getAutocompleteSuggestions();
+
+    // Selection via up- or down-arrow
+    if(event.keyCode == upKeyCode) this.selectedSuggestion--;
+    if(event.keyCode == downKeyCode) this.selectedSuggestion++;
+
+    // Correct selection based on length of suggestions
+    if(this.selectedSuggestion > suggestions.length-1) this.selectedSuggestion = 0;
+    if(this.selectedSuggestion < -1) this.selectedSuggestion = -1;
+
+    // Perform select on enter
+    if(event.keyCode == enterKeyCode && this.selectedSuggestion != -1) {
+      this.appendQueryPart(suggestions[this.selectedSuggestion]);
+      this.selectedSuggestion = -1;
+    }
+  }
+
+  /*@HostListener('window:click', ['$event'])
+  clickListener(event: any) {
+    console.log(this.queryInputWrapper.nativeElement.contains(event.toElement));
+  }*/
+
+  selectSuggestion(suggestion: number) {
+    this.selectedSuggestion = suggestion;
   }
 }

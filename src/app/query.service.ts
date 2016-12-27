@@ -80,10 +80,11 @@ export class QueryService {
   public appendQueryPartToQueryString(categories: Array<QueryCategory>, queryString: string, appendPart: QueryPart) {
     let lastPart: QueryPart, remainingQueryString: string;
     [lastPart, remainingQueryString] = this.popLastQueryPartFromString(categories, queryString);
-    if(!lastPart || lastPart.category != appendPart.category) remainingQueryString = queryString;
-    let newQuery = remainingQueryString.length > 0 ? remainingQueryString + " " : remainingQueryString;
+    if(!lastPart) remainingQueryString = "";
+    else if(lastPart.category != appendPart.category) { remainingQueryString = queryString; }
+    let newQuery = remainingQueryString.trim();
+    newQuery += newQuery.length > 0 ? " " : "";
     newQuery += appendPart.category.name + this.categoryValueSeparator + appendPart.value;
-    newQuery += appendPart.value.length > 0 ? " " : "";
     return newQuery;
   }
 
