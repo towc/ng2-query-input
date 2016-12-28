@@ -1,7 +1,8 @@
 <div class="wrapper">
   <query-input
-    [(categories)]="categories"
-    [(delegate)]="queryInputDelegate"
+    placeholder="Enter a query..."
+    [categories]="categories"
+    [delegate]="queryInputDelegate"
     (queryChanged)="queryChanged($event)"
     (queryCalled)="queryCalled($event)">
   </query-input>

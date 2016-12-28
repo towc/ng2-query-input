@@ -1,6 +1,6 @@
 <div class="query-input-wrapper" #queryInputWrapper>
   <div class="input">
-    <input type="text" [(ngModel)]="queryString" #queryStringInput>
+    <input type="text" [(ngModel)]="queryString" [placeholder]="placeholder" #queryStringInput>
   </div>
   <div class="suggestions" [hidden]="!suggestionsVisible">
     <div>

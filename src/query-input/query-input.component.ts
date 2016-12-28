@@ -15,11 +15,14 @@ import {QueryInputDelegate} from "./model/query-input-delegate";
 })
 export class QueryInputComponent {
 
-  @ViewChild('queryStringInput') queryStringInput: ElementRef;
+  @ViewChild('queryStringInput')  queryStringInput: ElementRef;
   @ViewChild('queryInputWrapper') queryInputWrapper: ElementRef;
-  @Input() categories: Array<QueryCategory> = [];
+
+  @Input('categories')  categories: Array<QueryCategory> = [];
   @Input('queryString') _queryString: string = "";
-  @Input() delegate: QueryInputDelegate;
+  @Input('delegate')    delegate: QueryInputDelegate;
+  @Input('placeholder') placeholder: string = "";
+
   @Output() queryChanged = new EventEmitter();
   @Output() queryCalled = new EventEmitter();
 
