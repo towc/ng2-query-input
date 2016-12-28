@@ -38,6 +38,8 @@ Add it to your module by importing it and adding it to the import-section
 
 Documentation still left to do. Have a look at the example implementation in [/src/example-app/](https://github.com/fabianscheidt/ng2-query-input/tree/master/src/example-app)
 
+You can find the working example here: http://www.fabian-scheidt.de/projects/ng2-query-input/
+
 ## License
 
 The MIT License (see the [LICENSE](https://github.com/fabianscheidt/ng2-query-input/blob/master/LICENSE) file for the full text)
