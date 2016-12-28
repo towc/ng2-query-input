@@ -1,3 +1,20 @@
 <div class="wrapper">
-  <query-input [(categories)]="categories" [(delegate)]="queryInputDelegate" (queryCalled)="queryCalled($event)"></query-input>
+  <query-input
+    [(categories)]="categories"
+    [(delegate)]="queryInputDelegate"
+    (queryChanged)="queryChanged($event)"
+    (queryCalled)="queryCalled($event)">
+  </query-input>
+
+  <p>&nbsp;</p>
+  <p>Current Query:</p>
+  <ul>
+    <li *ngFor="let queryPart of currentQuery.parts">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>
+  </ul>
+
+  <p>&nbsp;</p>
+  <p>Entered Query:</p>
+  <ul>
+    <li *ngFor="let queryPart of calledQuery.parts">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>
+  </ul>
 </div>

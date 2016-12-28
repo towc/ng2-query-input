@@ -1,4 +1,7 @@
-import {Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef} from '@angular/core';
+import {
+  Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef,
+  OnChanges
+} from '@angular/core';
 import {Query} from "./model/query";
 import {QueryCategory} from "./model/query-category";
 import {QueryService} from "./query.service";
@@ -10,13 +13,14 @@ import {QueryInputDelegate} from "./model/query-input-delegate";
   templateUrl: './query-input.component.html',
   styleUrls: ['./query-input.component.scss']
 })
-export class QueryInputComponent implements OnInit {
+export class QueryInputComponent {
 
   @ViewChild('queryStringInput') queryStringInput: ElementRef;
   @ViewChild('queryInputWrapper') queryInputWrapper: ElementRef;
   @Input() categories: Array<QueryCategory> = [];
-  @Input() queryString: string = "";
+  @Input('queryString') _queryString: string = "";
   @Input() delegate: QueryInputDelegate;
+  @Output() queryChanged = new EventEmitter();
   @Output() queryCalled = new EventEmitter();
 
   private suggestionsVisible: boolean = false;
@@ -27,7 +31,13 @@ export class QueryInputComponent implements OnInit {
 
   constructor(private queryService: QueryService) { }
 
-  ngOnInit() {
+  get queryString() {
+    return this._queryString;
+  }
+
+  set queryString(newString: string) {
+    this._queryString = newString;
+    this.queryChangedHandler();
   }
 
   /**
@@ -40,10 +50,17 @@ export class QueryInputComponent implements OnInit {
   }
 
   /**
-   * Fetches the query-object and calls the callback for an updated query
+   * Fetches the query-object and calls the callback for a called query
    */
-  enterHandler() {
+  queryCalledHandler() {
     this.queryCalled.emit(this.getQuery());
+  }
+
+  /**
+   * Fetches the query-object and calls the callback for a changed query
+   */
+  queryChangedHandler() {
+    this.queryChanged.emit(this.getQuery());
   }
 
   /**
@@ -114,7 +131,7 @@ export class QueryInputComponent implements OnInit {
     // Perform select on enter
     if(event.keyCode == enterKeyCode) {
       if(this.selectedSuggestion == -1) {
-        this.enterHandler();
+        this.queryCalledHandler();
       } else {
         this.appendQueryPart(suggestions[this.selectedSuggestion]);
         this.selectedSuggestion = -1;

@@ -21,6 +21,11 @@ export class AppComponent implements QueryInputDelegate{
   // Define the delegate for the autocomplete
   queryInputDelegate: QueryInputDelegate = this;
 
+  // Store current and called queries
+  currentQuery: Query = new Query([]);
+  calledQuery: Query = new Query([]);
+
+  // Creates dummy-categories
   constructor() {
     this.categories.push(new QueryCategory("Type", "Lorem ipsum"));
     this.categories.push(new QueryCategory("Name", "Dolor sit"));
@@ -73,11 +78,20 @@ export class AppComponent implements QueryInputDelegate{
   }
 
   /**
-   * Todo
+   * Called when query changes
+   *
+   * @param query
+   */
+  queryChanged(query: Query) {
+    this.currentQuery = query;
+  }
+
+  /**
+   * Called when query is called
    *
    * @param query
    */
   queryCalled(query: Query) {
-    console.log(query);
+    this.calledQuery = query;
   }
 }
