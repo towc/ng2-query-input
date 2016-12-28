@@ -11,7 +11,7 @@ This project provides text-inputs for custom search queries. A query can have mu
 Install via [npm](https://www.npmjs.com/search?q=ng2-table) package manager using the following command:
 
   ```bash
-  npm install https://github.com/fabianscheidt/ng2-query-input --save
+  npm install ng2-query-input --save
   ```
 
 Add it to your module by importing it and adding it to the import-section
