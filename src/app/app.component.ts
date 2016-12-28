@@ -44,7 +44,7 @@ export class AppComponent implements QueryInputDelegate{
       // Try to find a matching category for the last word of the value
       let lastWord = words[words.length-1];
       for(let category of this.categories) {
-        if(category.name.startsWith(lastWord)) {
+        if(category.name.startsWith(lastWord.trim())) {
           suggestions.push(new QueryPart(category, ""));
         }
       }
@@ -54,7 +54,7 @@ export class AppComponent implements QueryInputDelegate{
     switch(currentValue.category) {
       case this.categories[0]:
         for(let type of this.types) {
-          if(type.startsWith(currentValue.value) && type != currentValue.value) {
+          if(type.startsWith(currentValue.value.trim()) && type != currentValue.value) {
             suggestions.push(new QueryPart(currentValue.category, type));
           }
         }

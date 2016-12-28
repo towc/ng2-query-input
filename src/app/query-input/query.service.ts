@@ -80,10 +80,37 @@ export class QueryService {
   public appendQueryPartToQueryString(categories: Array<QueryCategory>, queryString: string, appendPart: QueryPart) {
     let lastPart: QueryPart, remainingQueryString: string;
     [lastPart, remainingQueryString] = this.popLastQueryPartFromString(categories, queryString);
-    if(!lastPart) remainingQueryString = "";
-    else if(lastPart.category != appendPart.category) { remainingQueryString = queryString; }
-    let newQuery = remainingQueryString.trim();
+
+    let newQuery;
+
+    // If the current query has no last part it can be fully replaced
+    if(!lastPart) {
+      newQuery = "";
+    }
+
+    // If the category of the last part matches to one to be appended, it means that only the value should be updated
+    else if(lastPart.category == appendPart.category) {
+      newQuery = remainingQueryString;
+    }
+
+    // The category is different, so a new one will be added
+    else {
+      newQuery = queryString;
+
+      // Remove the beginning of the category-name if it was typed
+      let categoryName = appendPart.category.name;
+      for(let i=categoryName.length; i > 0 ; i--) {
+        if(newQuery.endsWith(categoryName.substr(0, i))) {
+          newQuery = newQuery.slice(0, -i);
+        }
+      }
+    }
+
+    // Trim the query an add a whitespace only if the query is not empty
+    newQuery = newQuery.trim();
     newQuery += newQuery.length > 0 ? " " : "";
+
+    // Now that the current query is cleaned up, the actual append can start
     newQuery += appendPart.category.name + this.categoryValueSeparator + appendPart.value;
     return newQuery;
   }
