@@ -4,8 +4,4 @@ export class Ng2QueryInputPage {
   navigateTo() {
     return browser.get('/');
   }
-
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
-  }
 }

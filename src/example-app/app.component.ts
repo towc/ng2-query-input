@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import {QueryCategory} from "./query-input/model/query-category";
-import {QueryPart} from "./query-input/model/query-part";
-import {QueryInputDelegate} from "./query-input/model/query-input-delegate";
-import {Query} from "./query-input/model/query";
+import {QueryCategory} from "../query-input/model/query-category";
+import {QueryPart} from "../query-input/model/query-part";
+import {QueryInputDelegate} from "../query-input/model/query-input-delegate";
+import {Query} from "../query-input/model/query";
 
 @Component({
   selector: 'app-root',
