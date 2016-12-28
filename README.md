@@ -1,31 +1,43 @@
-# Ng2QueryInput
+# Angular 2 Query-Input
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.24.
+This project provides text-inputs for custom search queries. A query can have multiple arguments with each having a
+"search-category" and an assigned value. Queries have the following syntax:
 
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+  ```
+  <CategoryName1>: <Value1> <CategoryName2>: <Value2>
+  ```
 
-## Code scaffolding
+## Installation
+Install via [npm](https://www.npmjs.com/search?q=ng2-table) package manager using the following command:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
+  ```bash
+  npm install https://github.com/fabianscheidt/ng2-query-input --save
+  ```
 
-## Build
+Add it to your module by importing it and adding it to the import-section
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+  ```typescript
+  import { QueryInputModule } from 'ng2-query-input/ng2-query-input';
+  ```
 
-## Running unit tests
+  ```typescript
+  @NgModule({
+    declarations: [
+      ...
+    ],
+    imports: [
+      ...,
+      QueryInputModule
+    ]
+  })
+  export class ... { }
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  ```
 
-## Running end-to-end tests
+## Usage
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+Documentation still left to do. Have a look at the example implementation in [/src/example-app/](https://github.com/fabianscheidt/ng2-query-input/tree/master/src/example-app)
 
-## Deploying to Github Pages
+## License
 
-Run `ng github-pages:deploy` to deploy to Github Pages.
-
-## Further help
-
-To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+The MIT License (see the [LICENSE](https://github.com/fabianscheidt/ng2-query-input/blob/master/LICENSE) file for the full text)
