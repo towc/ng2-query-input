@@ -1,47 +1,62 @@
 input {
   width: 100%;
   padding: 5px;
+  box-sizing: border-box;
+  font-size: 11px;
 }
 
 .suggestions {
   position: relative;
 
-  ul {
-    display: block;
+  & > div {
     position: absolute;
-    margin: 0;
-    padding: 0;
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
+    top:0;
+    left:0;
+    white-space: nowrap;
 
-    .suggestion {
-      display: flex;
-      align-items: center;
-      width: 360px;
-      height: 20px;
-      padding: 5px;
+    .hiddenSpacer {
+      display: inline-block;
+      font-size: 11px;
+      visibility: hidden;
+    }
 
-      .category-name {
-        width: 60px;
-        flex-grow: 0;
-        font-size: 80%;
-      }
+    ul {
+      display: inline-block;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      border: 1px solid #cccccc;
 
-      .value {
-        flex-grow: 1;
-      }
+      .suggestion {
+        display: flex;
+        align-items: center;
+        width: 360px;
+        height: 20px;
+        padding: 5px;
+        font-size: 11px;
 
-      .category-description {
-        width: 100px;
-        flex-grow: 0;
-        font-size: 80%;
-        text-align: right;
-        opacity: 0.5;
+        .category-name {
+          width: 50px;
+          flex-grow: 0;
+        }
+
+        .value {
+          flex-grow: 1;
+          font-size: 13px;
+          font-weight: bold;
+        }
+
+        .category-description {
+          width: 100px;
+          flex-grow: 0;
+          text-align: right;
+          opacity: 0.5;
+        }
       }
     }
   }
 }
 
 .selected {
-  background-color: #f00;
+  background-color: #e0e0e0;
 }
