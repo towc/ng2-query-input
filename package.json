@@ -1,8 +1,9 @@
 {
   "name": "ng2-query-input",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Query-Textfield with Autocompletion for Angular 2",
+  "author": "Fabian Scheidt <fabianscheidt@yahoo.de>",
   "license": "MIT",
-  "angular-cli": {},
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -11,7 +12,12 @@
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor"
   },
-  "private": true,
+  "main": "ng2-query-input.js",
+  "typings": "ng2-query-input.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/fabianscheidt/ng2-query-input.git"
+  },
   "dependencies": {
     "@angular/common": "^2.3.1",
     "@angular/compiler": "^2.3.1",
@@ -43,5 +49,12 @@
     "ts-node": "1.2.1",
     "tslint": "^4.0.2",
     "typescript": "~2.0.3"
-  }
+  },
+  "contributors": [
+    {
+      "name": "Fabian Scheidt",
+      "email": "fabianscheidt@yahoo.de",
+      "url": "http://www.fabian-scheidt.de"
+    }
+  ]
 }

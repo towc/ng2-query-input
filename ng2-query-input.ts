@@ -1,0 +1,7 @@
+export * from './src/query-input/model/query'
+export * from './src/query-input/model/query-category'
+export * from './src/query-input/model/query-input-delegate'
+export * from './src/query-input/model/query-part'
+export * from './src/query-input/query.service'
+export * from './src/query-input/query-input.component'
+export { QueryInputModule } from './src/query-input/query-input.module'
