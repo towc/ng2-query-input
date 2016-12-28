@@ -15,8 +15,9 @@ export class AppComponent implements QueryInputDelegate{
   categories: Array<QueryCategory> = [];
 
   // Dummy suggestions
-  types: Array<string> = ["ABC", "DEF", "XYZ"];
+  types: Array<string> = ["A-Type", "B-Type", "C-Type"];
   names: Array<string> = ["Something", "Something more", "Different one"];
+  flags: Array<string> = ["Green", "Blue", "Yellow", "Red", "Purple"];
 
   // Define the delegate for the autocomplete
   queryInputDelegate: QueryInputDelegate = this;
@@ -27,8 +28,9 @@ export class AppComponent implements QueryInputDelegate{
 
   // Creates dummy-categories
   constructor() {
-    this.categories.push(new QueryCategory("Type", "Lorem ipsum"));
-    this.categories.push(new QueryCategory("Name", "Dolor sit"));
+    this.categories.push(new QueryCategory("Type", "Name of the type"));
+    this.categories.push(new QueryCategory("Name", "Part of the name"));
+    this.categories.push(new QueryCategory("Flag", "Color of the flag"));
   }
 
   /**
@@ -59,7 +61,7 @@ export class AppComponent implements QueryInputDelegate{
     switch(currentValue.category) {
       case this.categories[0]:
         for(let type of this.types) {
-          if(type.startsWith(currentValue.value.trim()) && type != currentValue.value) {
+          if(type.startsWith(currentValue.value.trim()) && type.trim() != currentValue.value.trim()) {
             suggestions.push(new QueryPart(currentValue.category, type));
           }
         }
@@ -67,8 +69,16 @@ export class AppComponent implements QueryInputDelegate{
 
       case this.categories[1]:
         for(let name of this.names) {
-          if(name.startsWith(currentValue.value) && name != currentValue.value) {
+          if(name.indexOf(currentValue.value.trim()) !== -1 && name.trim() != currentValue.value.trim()) {
             suggestions.push(new QueryPart(currentValue.category, name));
+          }
+        }
+        break;
+
+      case this.categories[2]:
+        for(let flag of this.flags) {
+          if(flag.indexOf(currentValue.value.trim()) !== -1 && flag.trim() != currentValue.value.trim()) {
+            suggestions.push(new QueryPart(currentValue.category, flag));
           }
         }
         break;
