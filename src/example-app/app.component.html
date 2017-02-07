@@ -7,11 +7,13 @@
     placeholder="Enter a query..."
     [categories]="categories"
     [delegate]="queryInputDelegate"
-    (queryChanged)="queryChanged($event)"
-    (queryCalled)="queryCalled($event)">
+    (queryChange)="queryChanged($event)"
+    (queryCalled)="queryCalled($event)"
+    [(queryString)]="currentQueryString">
   </query-input>
 
   <p>&nbsp;</p>
+  <p>Current Query-String: {{currentQueryString}}</p>
   <p>Current Query:</p>
   <ul>
     <li *ngFor="let queryPart of currentQuery.parts">{{ queryPart.category ? queryPart.category.name : "" }} - {{ queryPart.value }}</li>

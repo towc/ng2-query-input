@@ -24,6 +24,7 @@ export class AppComponent implements QueryInputDelegate{
 
   // Store current and called queries
   currentQuery: Query = new Query([]);
+  currentQueryString: string = "";
   calledQuery: Query = new Query([]);
 
   // Creates dummy-categories

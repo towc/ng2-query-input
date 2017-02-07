@@ -23,7 +23,8 @@ export class QueryInputComponent {
   @Input('delegate')    delegate: QueryInputDelegate;
   @Input('placeholder') placeholder: string = "";
 
-  @Output() queryChanged = new EventEmitter();
+  @Output() queryChange = new EventEmitter();
+  @Output() queryStringChange = new EventEmitter();
   @Output() queryCalled = new EventEmitter();
 
   private suggestionsVisible: boolean = false;
@@ -40,6 +41,7 @@ export class QueryInputComponent {
 
   set queryString(newString: string) {
     this._queryString = newString;
+    this.queryStringChange.emit(this._queryString);
     this.queryChangedHandler();
   }
 
@@ -63,7 +65,7 @@ export class QueryInputComponent {
    * Fetches the query-object and calls the callback for a changed query
    */
   queryChangedHandler() {
-    this.queryChanged.emit(this.getQuery());
+    this.queryChange.emit(this.getQuery());
   }
 
   /**
