@@ -1,6 +1,6 @@
 {
   "name": "ng2-query-input",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Query-Textfield with Autocompletion for Angular 2",
   "author": "Fabian Scheidt <fabianscheidt@yahoo.de>",
   "license": "MIT",
