@@ -1,13 +1,8 @@
-import {
-  Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef,
-  OnChanges
-} from '@angular/core';
+import {Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef} from '@angular/core';
 import {Query} from "./model/query";
 import {QueryCategory} from "./model/query-category";
 import {QueryService} from "./query.service";
 import {QueryPart} from "./model/query-part";
-import {QueryInputDelegate} from "./model/query-input-delegate";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'query-input',
@@ -21,17 +16,15 @@ export class QueryInputComponent {
 
   @Input('categories')  categories: Array<QueryCategory> = [];
   @Input('queryString') _queryString: string = "";
-  @Input('delegate')    delegate: QueryInputDelegate;
   @Input('placeholder') placeholder: string = "";
+  @Input('suggestions') suggestions: Array<QueryPart> = [];
 
   @Output() queryChange = new EventEmitter();
   @Output() queryStringChange = new EventEmitter();
   @Output() queryCalled = new EventEmitter();
 
-  private suggestionsVisible: boolean = false;
+  private suggestionsVisible: boolean = true;
   private selectedSuggestion: number = -1;
-
-  private suggestions: Array<QueryPart> = [];
 
   constructor(private queryService: QueryService) { }
 
@@ -66,24 +59,6 @@ export class QueryInputComponent {
    */
   queryChangedHandler() {
     this.queryChange.emit(this.getQuery());
-  }
-
-  /**
-   * Fetches the autocomplete-suggestions from the delegate and returns them
-   *
-   * @returns {Array<QueryPart>}
-   */
-  fetchAutocompleteSuggestions(): void {
-    if(!this.delegate) return;
-
-    // Fetch the last query-part to be passed to the suggestions-callback
-    let currentQuery = this.getQuery();
-    let parts = currentQuery.parts;
-    let lastQueryPart = parts.length > 0 ? parts[parts.length - 1] : new QueryPart(null, "");
-
-    // Fetch the result from the callback
-    this.delegate.getAutocompleteSuggestions(lastQueryPart)
-      .subscribe((suggestions: Array<QueryPart>) => this.suggestions = suggestions);
   }
 
   /**

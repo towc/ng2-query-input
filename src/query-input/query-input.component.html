@@ -1,7 +1,6 @@
 <div class="query-input-wrapper" #queryInputWrapper>
   <div class="input">
     <input type="text" [(ngModel)]="queryString"
-           (keydown)="fetchAutocompleteSuggestions()" (focus)="fetchAutocompleteSuggestions()"
            [placeholder]="placeholder" #queryStringInput autofocus>
   </div>
   <div class="suggestions" [hidden]="!suggestionsVisible">
