@@ -3,6 +3,7 @@ import {QueryCategory} from "../query-input/model/query-category";
 import {QueryPart} from "../query-input/model/query-part";
 import {QueryInputDelegate} from "../query-input/model/query-input-delegate";
 import {Query} from "../query-input/model/query";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -40,7 +41,7 @@ export class AppComponent implements QueryInputDelegate{
    * @param currentValue
    * @returns {Array<QueryPart>}
    */
-  getAutocompleteSuggestions(currentValue: QueryPart): Array<QueryPart> {
+  getAutocompleteSuggestions(currentValue: QueryPart): Observable<QueryPart[]> {
     console.log("Suggestions-fetch");
 
     let suggestions: Array<QueryPart> = [];
@@ -85,7 +86,7 @@ export class AppComponent implements QueryInputDelegate{
         break;
     }
 
-    return suggestions;
+    return Observable.of(suggestions);
   }
 
   /**

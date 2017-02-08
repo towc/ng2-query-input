@@ -7,6 +7,7 @@ import {QueryCategory} from "./model/query-category";
 import {QueryService} from "./query.service";
 import {QueryPart} from "./model/query-part";
 import {QueryInputDelegate} from "./model/query-input-delegate";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'query-input',
@@ -30,8 +31,7 @@ export class QueryInputComponent {
   private suggestionsVisible: boolean = false;
   private selectedSuggestion: number = -1;
 
-  private lastSuggestions: Array<QueryPart> = null;
-  private lastSuggestionsQueryString: string = null;
+  private suggestions: Array<QueryPart> = [];
 
   constructor(private queryService: QueryService) { }
 
@@ -73,21 +73,17 @@ export class QueryInputComponent {
    *
    * @returns {Array<QueryPart>}
    */
-  getAutocompleteSuggestions(): Array<QueryPart> {
-    if(!this.delegate) return [];
-
-    // Check if autocomplete needs to be updated or can be returned from cache
-    if(this.queryString == this.lastSuggestionsQueryString) return this.lastSuggestions;
+  fetchAutocompleteSuggestions(): void {
+    if(!this.delegate) return;
 
     // Fetch the last query-part to be passed to the suggestions-callback
     let currentQuery = this.getQuery();
     let parts = currentQuery.parts;
     let lastQueryPart = parts.length > 0 ? parts[parts.length - 1] : new QueryPart(null, "");
 
-    // Return the result of the callback
-    this.lastSuggestionsQueryString = this.queryString;
-    this.lastSuggestions = this.delegate.getAutocompleteSuggestions(lastQueryPart);
-    return this.lastSuggestions;
+    // Fetch the result from the callback
+    this.delegate.getAutocompleteSuggestions(lastQueryPart)
+      .subscribe((suggestions: Array<QueryPart>) => this.suggestions = suggestions);
   }
 
   /**
@@ -123,14 +119,12 @@ export class QueryInputComponent {
     const enterKeyCode = 13;
     const escKeyCode = 27;
 
-    let suggestions = this.getAutocompleteSuggestions();
-
     // Selection via up- or down-arrow
     if(event.keyCode == upKeyCode) this.selectedSuggestion--;
     if(event.keyCode == downKeyCode) this.selectedSuggestion++;
 
     // Correct selection based on length of suggestions
-    if(this.selectedSuggestion > suggestions.length-1) this.selectedSuggestion = 0;
+    if(this.selectedSuggestion > this.suggestions.length-1) this.selectedSuggestion = 0;
     if(this.selectedSuggestion < -1) this.selectedSuggestion = -1;
 
     // Perform select on enter
@@ -138,7 +132,7 @@ export class QueryInputComponent {
       if(this.selectedSuggestion == -1) {
         this.queryCalledHandler();
       } else {
-        this.appendQueryPart(suggestions[this.selectedSuggestion]);
+        this.appendQueryPart(this.suggestions[this.selectedSuggestion]);
         this.selectedSuggestion = -1;
       }
     }

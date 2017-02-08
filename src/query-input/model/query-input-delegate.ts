@@ -1,5 +1,6 @@
 import {QueryPart} from "./query-part";
+import {Observable} from "rxjs";
 
 export interface QueryInputDelegate {
-  getAutocompleteSuggestions(currentValue: QueryPart): Array<QueryPart>;
+  getAutocompleteSuggestions(currentValue: QueryPart): Observable<Array<QueryPart>>;
 }

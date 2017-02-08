@@ -1,13 +1,15 @@
 <div class="query-input-wrapper" #queryInputWrapper>
   <div class="input">
-    <input type="text" [(ngModel)]="queryString" [placeholder]="placeholder" #queryStringInput autofocus>
+    <input type="text" [(ngModel)]="queryString"
+           (keydown)="fetchAutocompleteSuggestions()" (focus)="fetchAutocompleteSuggestions()"
+           [placeholder]="placeholder" #queryStringInput autofocus>
   </div>
   <div class="suggestions" [hidden]="!suggestionsVisible">
     <div>
       <div class="hiddenSpacer">{{ queryString }}</div>
       <ul>
         <li class="suggestion"
-            *ngFor="let queryPart of getAutocompleteSuggestions(); let index=index"
+            *ngFor="let queryPart of suggestions; let index=index"
             [ngClass]="index == selectedSuggestion ? 'selected' : ''"
             (mouseover)="selectSuggestion(index)"
             (click)="appendQueryPart(queryPart)">
