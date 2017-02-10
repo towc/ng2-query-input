@@ -51,7 +51,7 @@ export class AppComponent {
       // Try to find a matching category for the last word of the value
       let lastWord = words[words.length-1];
       for(let category of this.categories) {
-        if(category.name.startsWith(lastWord.trim())) {
+        if(category.name.toLowerCase().startsWith(lastWord.trim().toLowerCase())) {
           this.suggestions.push(new QueryPart(category, ""));
         }
       }

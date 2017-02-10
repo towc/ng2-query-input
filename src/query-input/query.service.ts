@@ -100,7 +100,7 @@ export class QueryService {
       // Remove the beginning of the category-name if it was typed
       let categoryName = appendPart.category.name;
       for(let i=categoryName.length; i > 0 ; i--) {
-        if(newQuery.endsWith(categoryName.substr(0, i))) {
+        if(newQuery.toLowerCase().endsWith(categoryName.toLowerCase().substr(0, i))) {
           newQuery = newQuery.slice(0, -i);
         }
       }
