@@ -31,6 +31,8 @@ export class AppComponent {
     this.categories.push(new QueryCategory("Type", "Name of the type"));
     this.categories.push(new QueryCategory("Name", "Part of the name"));
     this.categories.push(new QueryCategory("Flag", "Color of the flag"));
+
+    this.fetchAutocompleteSuggestions(new QueryPart(null, ""));
   }
 
   /**

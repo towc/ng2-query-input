@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef} from '@angular/core';
+import {Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, Renderer} from '@angular/core';
 import {Query} from "./model/query";
 import {QueryCategory} from "./model/query-category";
 import {QueryService} from "./query.service";
@@ -23,10 +23,10 @@ export class QueryInputComponent {
   @Output() queryStringChange = new EventEmitter();
   @Output() queryCalled = new EventEmitter();
 
-  private suggestionsVisible: boolean = true;
+  private suggestionsVisible: boolean = false;
   private selectedSuggestion: number = -1;
 
-  constructor(private queryService: QueryService) { }
+  constructor(private queryService: QueryService, private renderer: Renderer) { }
 
   get queryString() {
     return this._queryString;
@@ -52,6 +52,7 @@ export class QueryInputComponent {
    */
   queryCalledHandler() {
     this.queryCalled.emit(this.getQuery());
+    this.suggestionsVisible = false;
   }
 
   /**
@@ -107,14 +108,19 @@ export class QueryInputComponent {
       if(this.selectedSuggestion == -1) {
         this.queryCalledHandler();
       } else {
-        this.appendQueryPart(this.suggestions[this.selectedSuggestion]);
+        let selectedSuggestion = this.suggestions[this.selectedSuggestion];
+        if(selectedSuggestion) this.appendQueryPart(selectedSuggestion);
         this.selectedSuggestion = -1;
       }
     }
 
     // Hide suggestions on esc
     if(event.keyCode == escKeyCode) {
-      this.suggestionsVisible = false;
+      if(this.suggestionsVisible) {
+        this.suggestionsVisible = false;
+        event.preventDefault();
+        event.stopPropagation();
+      }
     }
   }
 
@@ -125,6 +131,11 @@ export class QueryInputComponent {
   @HostListener('window:click', ['$event'])
   clickListener(event: MouseEvent) {
     this.suggestionsVisible = this.queryInputWrapper.nativeElement.contains(event.toElement);
+
+    if(this.suggestionsVisible) {
+      // Make sure the input remains focused
+      this.renderer.invokeElementMethod(this.queryStringInput.nativeElement, 'focus', []);
+    }
   }
 
   /**
@@ -135,8 +146,5 @@ export class QueryInputComponent {
   selectSuggestion(suggestion: number) {
     // Mark the selection
     this.selectedSuggestion = suggestion;
-
-    // Todo: Make sure the input remains focused
-    this.queryStringInput.nativeElement.focus();
   }
 }
