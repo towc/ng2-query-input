@@ -1,62 +1,84 @@
-input {
-  width: 100%;
-  padding: 5px;
-  box-sizing: border-box;
-  font-size: 11px;
-}
-
-.suggestions {
+.query-input-wrapper {
   position: relative;
 
-  & > div {
+  input {
+    width: 100%;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 11px;
+    font-family: inherit;
+    background: transparent;
+  }
+
+  .query-parts {
     position: absolute;
-    top:0;
-    left:0;
-    white-space: nowrap;
+    top: 0;
+    left: 0;
+    padding: 5px 7px;
 
-    .hiddenSpacer {
-      display: inline-block;
+    .part {
       font-size: 11px;
-      visibility: hidden;
-    }
-
-    ul {
       display: inline-block;
-      margin: 0;
-      padding: 0;
-      background-color: #ffffff;
-      border: 1px solid #cccccc;
+      margin-right: 0.28em;
+      padding: 2px 0 0 0;
+      color: transparent;
+      border-bottom: 1px solid #000;
+    }
+  }
 
-      .suggestion {
-        display: flex;
-        align-items: center;
-        width: 360px;
-        height: 20px;
-        padding: 5px;
+  .suggestions {
+    position: relative;
+
+    & > div {
+      position: absolute;
+      top: 0;
+      left: 0;
+      white-space: nowrap;
+
+      .hiddenSpacer {
+        display: inline-block;
         font-size: 11px;
+        visibility: hidden;
+      }
 
-        .category-name {
-          width: 50px;
-          flex-grow: 0;
-        }
+      ul {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        border: 1px solid #cccccc;
 
-        .value {
-          flex-grow: 1;
-          font-size: 13px;
-          font-weight: bold;
-        }
+        .suggestion {
+          display: flex;
+          align-items: center;
+          width: 360px;
+          height: 20px;
+          padding: 5px;
+          font-size: 11px;
 
-        .category-description {
-          width: 100px;
-          flex-grow: 0;
-          text-align: right;
-          opacity: 0.5;
+          .category-name {
+            width: 50px;
+            flex-grow: 0;
+          }
+
+          .value {
+            flex-grow: 1;
+            font-size: 13px;
+            font-weight: bold;
+          }
+
+          .category-description {
+            width: 100px;
+            flex-grow: 0;
+            text-align: right;
+            opacity: 0.5;
+          }
         }
       }
     }
   }
-}
 
-.selected {
-  background-color: #e0e0e0;
+  .selected {
+    background-color: #e0e0e0;
+  }
 }
