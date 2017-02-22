@@ -19,9 +19,10 @@ describe('QueryService', () => {
   someCategories.push(new QueryCategory("Two", "The secound of all"));
   someCategories.push(new QueryCategory("Three", "The third of all"));
   someCategories.push(new QueryCategory("Four", "The fourth of all"));
+  someCategories.push(new QueryCategory("Five", "The fifth of all"));
 
   // Create a dummy-query
-  let someQueryString = "Two: Lorem One: Ipsum Three: Something with whitespaces";
+  let someQueryString = 'Two: Lorem One: Ipsum Three: Something with whitespaces Four: "Something in quotes"';
 
   it('should be able to inject the service', inject([QueryService], (service: QueryService) => {
     expect(service).toBeTruthy();
@@ -40,17 +41,23 @@ describe('QueryService', () => {
     expect(someQuery).not.toBeNull();
 
     // Check count of parts
-    expect(someQuery.parts.length).toEqual(3);
+    expect(someQuery.parts.length).toEqual(6);
 
     // Check categories and their order
     expect(someQuery.parts[0].category).toBe(someCategories[1]);
     expect(someQuery.parts[1].category).toBe(someCategories[0]);
     expect(someQuery.parts[2].category).toBe(someCategories[2]);
+    expect(someQuery.parts[3].category).toBeNull();
+    expect(someQuery.parts[4].category).toBeNull();
+    expect(someQuery.parts[5].category).toBe(someCategories[3]);
 
     // Check values
     expect(someQuery.parts[0].value).toEqual("Lorem");
     expect(someQuery.parts[1].value).toEqual("Ipsum");
-    expect(someQuery.parts[2].value).toEqual("Something with whitespaces");
+    expect(someQuery.parts[2].value).toEqual("Something");
+    expect(someQuery.parts[3].value).toEqual("with");
+    expect(someQuery.parts[4].value).toEqual("whitespaces");
+    expect(someQuery.parts[5].value).toEqual("Something in quotes");
   }));
 
   it('should not fail for empty input', inject([QueryService], (service: QueryService) => {
@@ -70,37 +77,41 @@ describe('QueryService', () => {
 
   it('should properly append categories', inject([QueryService], (service: QueryService) => {
     let someQueryPart, someQuery;
-    someQueryPart = new QueryPart(someCategories[3], "");
+    someQueryPart = new QueryPart(someCategories[4], "");
 
     someQuery = service.appendQueryPartToQueryString(someCategories, "", someQueryPart);
-    expect(someQuery).toEqual("Four: ");
+    expect(someQuery).toEqual("Five: ");
 
     someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
-    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Something with whitespaces Four: ");
+    expect(someQuery).toEqual(someQueryString + " Five: ");
   }));
 
   it('should properly append values', inject([QueryService], (service: QueryService) => {
     let someQueryPart, someQuery;
 
-    someQueryPart = new QueryPart(someCategories[2], "Some Value");
-    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
-    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Some Value");
-
     someQueryPart = new QueryPart(someCategories[3], "Some Value");
     someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
-    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Something with whitespaces Four: Some Value");
+    expect(someQuery).toEqual('Two: Lorem One: Ipsum Three: Something with whitespaces Four: "Some Value"');
+
+    someQueryPart = new QueryPart(someCategories[4], "Value");
+    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
+    expect(someQuery).toEqual(someQueryString + " Five: Value");
+
+    someQueryPart = new QueryPart(someCategories[4], "Some Value");
+    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
+    expect(someQuery).toEqual(someQueryString + ' Five: "Some Value"');
   }));
 
   it('should properly append partials', inject([QueryService], (service: QueryService) => {
     let someQueryPart, someQuery;
 
     // Partial name already typed
-    someQueryPart = new QueryPart(someCategories[3], "");
-    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString + " Fou", someQueryPart);
-    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Something with whitespaces Four: ");
+    someQueryPart = new QueryPart(someCategories[4], "");
+    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString + " Fiv", someQueryPart);
+    expect(someQuery).toEqual(someQueryString + " Five: ");
 
-    someQueryPart = new QueryPart(someCategories[3], "Some Value");
-    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString + " Four: Some", someQueryPart);
-    expect(someQuery).toEqual("Two: Lorem One: Ipsum Three: Something with whitespaces Four: Some Value");
+    someQueryPart = new QueryPart(someCategories[4], "Some Value");
+    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString + " Five: Some", someQueryPart);
+    expect(someQuery).toEqual(someQueryString + ' Five: "Some Value"');
   }));
 });

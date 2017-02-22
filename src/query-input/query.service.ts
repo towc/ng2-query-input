@@ -49,25 +49,25 @@ export class QueryService {
    * @returns {[*,string]}
    */
   private popLastQueryPartFromString(categories: Array<QueryCategory>, queryString: string): [QueryPart, string] {
-    let lastCategory: QueryCategory = null;
-    let lastCategoryIndex = -1;
 
-    for(let category of categories) {
-      let categoryIndex = queryString.lastIndexOf(category.name + this.categoryValueSeparator);
-      if(categoryIndex > lastCategoryIndex) {
-        lastCategory = category;
-        lastCategoryIndex = categoryIndex;
+    let lastPartRegexString = "([^\\s\"']+|(\"([^\"]*)\")|('([^']*)'))$";
+
+    // Try to match categories or the default category
+    for(let category of categories.concat([null])) {
+      let categoryPart = category ? category.name + this.categoryValueSeparator + "\\s*" : "";
+      let regexStr =  categoryPart + lastPartRegexString;
+      let regex = new RegExp(regexStr);
+      let match = queryString.trim().match(regex);
+
+      if(match && match[1]) {
+        // Pick the correct match to not have quotes in result string
+        let value = match[5] || match[3] || match[1];
+        let queryPart = new QueryPart(category, value);
+        let remainingQueryString = queryString.trim().replace(regex, "").trim();
+        return [queryPart, remainingQueryString];
       }
     }
-
-    if(lastCategory != null) {
-      let remainingQueryString = queryString.substr(0, lastCategoryIndex).trim();
-      let queryPartValueIndex = lastCategoryIndex + lastCategory.name.length + this.categoryValueSeparator.length;
-      let queryPartValue = queryString.substr(queryPartValueIndex);
-      let queryPart = new QueryPart(lastCategory, queryPartValue);
-      return [queryPart, remainingQueryString];
-    }
-    return [null, queryString];
+    return [null, queryString.trim()];
   }
 
   /**
@@ -110,8 +110,10 @@ export class QueryService {
     newQuery = newQuery.trim();
     newQuery += newQuery.length > 0 ? " " : "";
 
+    let value = appendPart.value.indexOf(" ") == -1 ? appendPart.value : '"' + appendPart.value + '"';
+
     // Now that the current query is cleaned up, the actual append can start
-    newQuery += appendPart.category.name + this.categoryValueSeparator + appendPart.value;
+    newQuery += appendPart.category.name + this.categoryValueSeparator + value;
     return newQuery;
   }
 
