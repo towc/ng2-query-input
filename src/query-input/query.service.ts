@@ -54,7 +54,7 @@ export class QueryService {
 
     // Try to match categories or the default category
     for(let category of categories.concat([null])) {
-      let categoryPart = category ? category.name + this.categoryValueSeparator + "\\s*" : "";
+      let categoryPart = category ? category.name + this.categoryValueSeparator.trim() + "\\s*" : "";
       let regexStr =  categoryPart + lastPartRegexString;
       let regex = new RegExp(regexStr);
       let match = queryString.trim().match(regex);
