@@ -50,7 +50,7 @@ export class QueryService {
    */
   private popLastQueryPartFromString(categories: Array<QueryCategory>, queryString: string): [QueryPart, string] {
 
-    let lastPartRegexString = "([^\\s\"']+|(\"([^\"]*)\")|('([^']*)'))$";
+    let lastPartRegexString = "([^\\s\"']*|(\"([^\"]*)\")|('([^']*)'))$";
 
     // Try to match categories or the default category
     for(let category of categories.concat([null])) {
@@ -59,9 +59,9 @@ export class QueryService {
       let regex = new RegExp(regexStr);
       let match = queryString.trim().match(regex);
 
-      if(match && match[1]) {
+      if(match && match[0].length > 0) {
         // Pick the correct match to not have quotes in result string
-        let value = match[5] || match[3] || match[1];
+        let value = match[5] || match[3] || match[1] || "";
         let queryPart = new QueryPart(category, value);
         let remainingQueryString = queryString.trim().replace(regex, "").trim();
         return [queryPart, remainingQueryString];
