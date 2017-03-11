@@ -114,4 +114,23 @@ describe('QueryService', () => {
     someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString + " Five: Some", someQueryPart);
     expect(someQuery).toEqual(someQueryString + ' Five: "Some Value"');
   }));
+
+  it('should properly append text without category', inject([QueryService], (service: QueryService) => {
+
+    let someQueryPart, someQuery;
+
+    // Without whitespace
+    someQueryPart = new QueryPart(null, "No-Whitespace");
+    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
+    expect(someQuery).toEqual(someQueryString + " No-Whitespace");
+
+    // Partially typed
+    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString + " No-", someQueryPart);
+    expect(someQuery).toEqual(someQueryString + " No-Whitespace");
+
+    // With whitespace
+    someQueryPart = new QueryPart(null, "Some Whitespace");
+    someQuery = service.appendQueryPartToQueryString(someCategories, someQueryString, someQueryPart);
+    expect(someQuery).toEqual(someQueryString + ' "Some Whitespace"');
+  }));
 });

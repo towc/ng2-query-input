@@ -17,7 +17,7 @@
             [ngClass]="index == selectedSuggestion ? 'selected' : ''"
             (mouseover)="selectSuggestion(index)"
             (click)="appendQueryPart(queryPart)">
-          <div class="category-name">{{ queryPart.category ? queryPart.category.name : "" }}:</div>
+          <div class="category-name">{{ queryPart.category ? queryPart.category.name + ":" : "" }}</div>
           <div class="value">{{ queryPart.value }}</div>
           <div class="category-description">{{ queryPart.category ? queryPart.category.description : "" }}</div>
         </li>

@@ -97,11 +97,13 @@ export class QueryService {
     else {
       newQuery = queryString;
 
-      // Remove the beginning of the category-name if it was typed
-      let categoryName = appendPart.category.name;
-      for(let i=categoryName.length; i > 0 ; i--) {
-        if(newQuery.toLowerCase().endsWith(categoryName.toLowerCase().substr(0, i))) {
-          newQuery = newQuery.slice(0, -i);
+      if(appendPart.category) {
+        // Remove the beginning of the category-name if it was typed
+        let categoryName = appendPart.category.name;
+        for(let i=categoryName.length; i > 0 ; i--) {
+          if(newQuery.toLowerCase().endsWith(categoryName.toLowerCase().substr(0, i))) {
+            newQuery = newQuery.slice(0, -i);
+          }
         }
       }
     }
@@ -113,7 +115,7 @@ export class QueryService {
     let value = appendPart.value.indexOf(" ") == -1 ? appendPart.value : '"' + appendPart.value + '"';
 
     // Now that the current query is cleaned up, the actual append can start
-    newQuery += appendPart.category.name + this.categoryValueSeparator + value;
+    newQuery += (appendPart.category ? (appendPart.category.name + this.categoryValueSeparator) : "") + value;
     return newQuery;
   }
 
