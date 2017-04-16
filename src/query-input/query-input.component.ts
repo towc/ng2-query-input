@@ -23,7 +23,7 @@ export class QueryInputComponent {
   @Output() queryStringChange = new EventEmitter();
   @Output() queryCalled = new EventEmitter();
 
-  private suggestionsVisible: boolean = false;
+  public suggestionsVisible: boolean = false;
   private selectedSuggestion: number = -1;
 
   constructor(private queryService: QueryService, private renderer: Renderer) { }
