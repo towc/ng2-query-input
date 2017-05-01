@@ -1,8 +1,9 @@
+/* tslint:disable:no-input-rename */
 import {Component, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, Renderer} from '@angular/core';
-import {Query} from "./model/query";
-import {QueryCategory} from "./model/query-category";
-import {QueryService} from "./query.service";
-import {QueryPart} from "./model/query-part";
+import {Query} from './model/query';
+import {QueryCategory} from './model/query-category';
+import {QueryService} from './query.service';
+import {QueryPart} from './model/query-part';
 
 @Component({
   selector: 'query-input',
@@ -14,17 +15,17 @@ export class QueryInputComponent {
   @ViewChild('queryStringInput')  queryStringInput: ElementRef;
   @ViewChild('queryInputWrapper') queryInputWrapper: ElementRef;
 
-  @Input('categories')  categories: Array<QueryCategory> = [];
-  @Input('queryString') _queryString: string = "";
-  @Input('placeholder') placeholder: string = "";
+  @Input('categories') categories: Array<QueryCategory> = [];
+  @Input('queryString') _queryString = '';
+  @Input('placeholder') placeholder = '';
   @Input('suggestions') suggestions: Array<QueryPart> = [];
 
   @Output() queryChange = new EventEmitter();
   @Output() queryStringChange = new EventEmitter();
   @Output() queryCalled = new EventEmitter();
 
-  public suggestionsVisible: boolean = false;
-  private selectedSuggestion: number = -1;
+  public suggestionsVisible = false;
+  public selectedSuggestion: number = -1;
 
   constructor(private queryService: QueryService, private renderer: Renderer) { }
 
@@ -83,12 +84,12 @@ export class QueryInputComponent {
   keyboardListener(event: KeyboardEvent) {
 
     // Reenable suggestions of the input is focused
-    if(document.activeElement == this.queryStringInput.nativeElement) {
+    if (document.activeElement === this.queryStringInput.nativeElement) {
       this.suggestionsVisible = true;
     }
 
     // Perform actions only if suggestions are visible
-    if(!this.suggestionsVisible) return;
+    if (!this.suggestionsVisible) { return; }
 
     const upKeyCode = 38;
     const downKeyCode = 40;
@@ -96,27 +97,27 @@ export class QueryInputComponent {
     const escKeyCode = 27;
 
     // Selection via up- or down-arrow
-    if(event.keyCode == upKeyCode) this.selectedSuggestion--;
-    if(event.keyCode == downKeyCode) this.selectedSuggestion++;
+    if (event.keyCode === upKeyCode) { this.selectedSuggestion--; }
+    if (event.keyCode === downKeyCode) { this.selectedSuggestion++; }
 
     // Correct selection based on length of suggestions
-    if(this.selectedSuggestion > this.suggestions.length-1) this.selectedSuggestion = 0;
-    if(this.selectedSuggestion < -1) this.selectedSuggestion = -1;
+    if (this.selectedSuggestion > this.suggestions.length - 1) { this.selectedSuggestion = 0; }
+    if (this.selectedSuggestion < -1) { this.selectedSuggestion = -1; }
 
     // Perform select on enter
-    if(event.keyCode == enterKeyCode) {
-      if(this.selectedSuggestion == -1) {
+    if (event.keyCode === enterKeyCode) {
+      if (this.selectedSuggestion === -1) {
         this.queryCalledHandler();
       } else {
-        let selectedSuggestion = this.suggestions[this.selectedSuggestion];
-        if(selectedSuggestion) this.appendQueryPart(selectedSuggestion);
+        const selectedSuggestion = this.suggestions[this.selectedSuggestion];
+        if (selectedSuggestion) { this.appendQueryPart(selectedSuggestion); }
         this.selectedSuggestion = -1;
       }
     }
 
     // Hide suggestions on esc
-    if(event.keyCode == escKeyCode) {
-      if(this.suggestionsVisible) {
+    if (event.keyCode === escKeyCode) {
+      if (this.suggestionsVisible) {
         this.suggestionsVisible = false;
         event.preventDefault();
         event.stopPropagation();
@@ -132,7 +133,7 @@ export class QueryInputComponent {
   clickListener(event: MouseEvent) {
     this.suggestionsVisible = this.queryInputWrapper.nativeElement.contains(event.toElement);
 
-    if(this.suggestionsVisible) {
+    if (this.suggestionsVisible) {
       // Make sure the input remains focused
       this.renderer.invokeElementMethod(this.queryStringInput.nativeElement, 'focus', []);
     }

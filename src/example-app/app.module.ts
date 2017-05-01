@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import {QueryService} from "../query-input/query.service";
-import {QueryInputModule} from "../query-input/query-input.module";
+import {QueryService} from '../query-input/query.service';
+import {QueryInputModule} from '../query-input/query-input.module';
 
 @NgModule({
   declarations: [

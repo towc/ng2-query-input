@@ -4,8 +4,8 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { QueryInputComponent } from './query-input.component';
-import {QueryService} from "./query.service";
-import {FormsModule} from "@angular/forms";
+import {QueryService} from './query.service';
+import {FormsModule} from '@angular/forms';
 
 describe('QueryInputComponent', () => {
   let component: QueryInputComponent;

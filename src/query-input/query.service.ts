@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import {Query} from "./model/query";
-import {QueryCategory} from "./model/query-category";
-import {QueryPart} from "./model/query-part";
+import {Query} from './model/query';
+import {QueryCategory} from './model/query-category';
+import {QueryPart} from './model/query-part';
 
 @Injectable()
 export class QueryService {
 
   // String to separate category-names an the values
-  private categoryValueSeparator = ": ";
+  private categoryValueSeparator = ': ';
 
   /**
    * Creates a query-object from a query-string. The string can have the following syntax:
@@ -21,15 +21,15 @@ export class QueryService {
    * @returns {Query}
    */
   public getQueryFromString(categories: Array<QueryCategory>, queryString: string): Query {
-    let queryParts: Array<QueryPart> = [];
+    const queryParts: Array<QueryPart> = [];
     let remainingQueryString: string = queryString;
 
-    while(true) {
+    while (true) {
       let lastPart: QueryPart;
       [lastPart, remainingQueryString] = this.popLastQueryPartFromString(categories, remainingQueryString);
 
-      if(lastPart === null) {
-        if(remainingQueryString.length > 0) {
+      if (lastPart === null) {
+        if (remainingQueryString.length > 0) {
           queryParts.unshift(new QueryPart(null, remainingQueryString));
         }
         break;
@@ -50,20 +50,20 @@ export class QueryService {
    */
   private popLastQueryPartFromString(categories: Array<QueryCategory>, queryString: string): [QueryPart, string] {
 
-    let lastPartRegexString = "([^\\s\"']*|(\"([^\"]*)\")|('([^']*)'))$";
+    const lastPartRegexString = '([^\\s"\']*|("([^"]*)")|(\'([^\']*)\'))$';
 
     // Try to match categories or the default category
-    for(let category of categories.concat([null])) {
-      let categoryPart = category ? category.name + this.categoryValueSeparator.trim() + "\\s*" : "";
-      let regexStr =  categoryPart + lastPartRegexString;
-      let regex = new RegExp(regexStr);
-      let match = queryString.trim().match(regex);
+    for (const category of categories.concat([null])) {
+      const categoryPart = category ? category.name + this.categoryValueSeparator.trim() + '\\s*' : '';
+      const regexStr =  categoryPart + lastPartRegexString;
+      const regex = new RegExp(regexStr);
+      const match = queryString.trim().match(regex);
 
-      if(match && match[0].length > 0) {
+      if (match && match[0].length > 0) {
         // Pick the correct match to not have quotes in result string
-        let value = match[5] || match[3] || match[1] || "";
-        let queryPart = new QueryPart(category, value);
-        let remainingQueryString = queryString.trim().replace(regex, "").trim();
+        const value = match[5] || match[3] || match[1] || '';
+        const queryPart = new QueryPart(category, value);
+        const remainingQueryString = queryString.trim().replace(regex, '').trim();
         return [queryPart, remainingQueryString];
       }
     }
@@ -84,24 +84,22 @@ export class QueryService {
     let newQuery;
 
     // If the current query has no last part it can be fully replaced
-    if(!lastPart) {
-      newQuery = "";
-    }
+    if (!lastPart) {
+      newQuery = '';
 
     // If the category of the last part matches to one to be appended, it means that only the value should be updated
-    else if(lastPart.category == appendPart.category) {
+    } else if (lastPart.category === appendPart.category) {
       newQuery = remainingQueryString;
-    }
 
     // The category is different, so a new one will be added
-    else {
+    } else {
       newQuery = queryString;
 
-      if(appendPart.category) {
+      if (appendPart.category) {
         // Remove the beginning of the category-name if it was typed
-        let categoryName = appendPart.category.name;
-        for(let i=categoryName.length; i > 0 ; i--) {
-          if(newQuery.toLowerCase().endsWith(categoryName.toLowerCase().substr(0, i))) {
+        const categoryName = appendPart.category.name;
+        for (let i = categoryName.length; i > 0 ; i--) {
+          if (newQuery.toLowerCase().endsWith(categoryName.toLowerCase().substr(0, i))) {
             newQuery = newQuery.slice(0, -i);
           }
         }
@@ -110,12 +108,12 @@ export class QueryService {
 
     // Trim the query an add a whitespace only if the query is not empty
     newQuery = newQuery.trim();
-    newQuery += newQuery.length > 0 ? " " : "";
+    newQuery += newQuery.length > 0 ? ' ' : '';
 
-    let value = appendPart.value.indexOf(" ") == -1 ? appendPart.value : '"' + appendPart.value + '"';
+    const value = appendPart.value.indexOf(' ') === -1 ? appendPart.value : '"' + appendPart.value + '"';
 
     // Now that the current query is cleaned up, the actual append can start
-    newQuery += (appendPart.category ? (appendPart.category.name + this.categoryValueSeparator) : "") + value;
+    newQuery += (appendPart.category ? (appendPart.category.name + this.categoryValueSeparator) : '') + value;
     return newQuery;
   }
 

@@ -2,9 +2,9 @@
 
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import {QueryInputComponent} from "../query-input/query-input.component";
-import {FormsModule} from "@angular/forms";
-import {QueryService} from "../query-input/query.service";
+import {QueryInputComponent} from '../query-input/query-input.component';
+import {FormsModule} from '@angular/forms';
+import {QueryService} from '../query-input/query.service';
 
 describe('AppComponent', () => {
   beforeEach(() => {
@@ -20,8 +20,8 @@ describe('AppComponent', () => {
   });
 
   it('should create the app', async(() => {
-    let fixture = TestBed.createComponent(AppComponent);
-    let app = fixture.debugElement.componentInstance;
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   }));
 });
