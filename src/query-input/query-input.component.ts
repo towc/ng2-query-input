@@ -123,6 +123,11 @@ export class QueryInputComponent {
         event.stopPropagation();
       }
     }
+
+    // Clear selection for any other key
+    if ([upKeyCode, downKeyCode, enterKeyCode, escKeyCode].indexOf(event.keyCode) === -1) {
+      this.selectedSuggestion = -1;
+    }
   }
 
   /**
