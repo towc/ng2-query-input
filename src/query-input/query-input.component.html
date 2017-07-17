@@ -16,7 +16,7 @@
             *ngFor="let queryPart of suggestions; let index=index"
             [ngClass]="index == selectedSuggestion ? 'selected' : ''"
             (mouseover)="selectSuggestion(index)"
-            (click)="appendQueryPart(queryPart)">
+            (click)="appendQueryPart(queryPart); suggestionClick($event)">
           <div class="category-name">{{ queryPart.category ? queryPart.category.name + ":" : "" }}</div>
           <div class="value">{{ queryPart.value }}</div>
           <div class="category-description">{{ queryPart.category ? queryPart.category.description : "" }}</div>

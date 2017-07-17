@@ -137,11 +137,15 @@ export class QueryInputComponent {
   @HostListener('window:click', ['$event'])
   clickListener(event: MouseEvent) {
     this.suggestionsVisible = this.queryInputWrapper.nativeElement.contains(event.toElement);
+  }
 
-    if (this.suggestionsVisible) {
-      // Make sure the input remains focused
-      this.renderer.invokeElementMethod(this.queryStringInput.nativeElement, 'focus', []);
-    }
+  /**
+   * Triggered when a suggestion is clicked. Focuses the Input and shows the suggestions
+   */
+  public suggestionClick(event: MouseEvent) {
+    this.suggestionsVisible = true;
+    this.renderer.invokeElementMethod(this.queryStringInput.nativeElement, 'focus', []);
+    event.stopPropagation();
   }
 
   /**
