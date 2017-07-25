@@ -22,8 +22,114 @@ export class QueryService {
    */
   public getQueryFromString(categories: Array<QueryCategory>, queryString: string): Query {
     const queryParts: Array<QueryPart> = [];
-    let remainingQueryString: string = queryString;
 
+    
+  let lastChar = ''
+    , lastWord = ''
+    , lastValue = ''
+    , isShortcut = false
+    , inQuotes = 0;
+  for( var i = 0; i < queryString.length; ++i ) {
+    var char = queryString[ i ];
+    
+    if( char === '"' && lastChar !== '\\' && inQuotes !== 1 ) {
+      inQuotes = inQuotes ? 0 : 2;
+      
+      lastChar = char;
+      lastWord += char;
+    } else
+      
+    if( char === "'" && lastChar !== '\\' && inQuotes !== 2 ) {
+      inQuotes = inQuotes ? 0 : 1;
+      
+      lastChar = char;
+      lastWord += char;
+    } else
+    
+    if( char === ':' && !inQuotes ) {
+      
+      if( queryParts.length === 0 && lastValue ) {
+        queryParts.push({
+          category: null, value:
+          this.stripValue( lastValue )
+        });
+        
+      } else if( queryParts.length > 0 && queryParts[ queryParts.length - 1 ].value[ 0 ] !== '#' ) {
+        queryParts[ queryParts.length - 1 ].value = this.stripValue( lastValue );
+        
+      }
+      
+      queryParts.push({
+        category: categories.find( category => category.name === lastWord ) || { name: lastWord, description: '' },
+        value: ''
+      });
+      lastWord = '';
+      lastValue = '';
+      
+    } else
+      
+    if( char === '#' && !inQuotes ) {
+      
+      if( queryParts.length > 0 ) {
+        queryParts[ queryParts.length - 1 ].value = this.stripValue( lastValue );
+        lastValue = '';
+        lastWord = '';
+      } else if( lastValue ) {
+        queryParts.push({
+          category: null,
+          value: this.stripValue( lastValue )
+        });
+      }
+      
+      isShortcut = true;
+    } else
+    
+    if( char === ' ' && !inQuotes ) {
+      
+      if( isShortcut ) {
+        queryParts.push({
+          category: null,
+          value: '#' + lastWord
+        });
+        lastWord = '';
+        lastValue = '';
+        isShortcut = false;
+      } else {
+      
+        lastValue += lastWord + char;
+        lastWord = '';
+      }
+    } else
+    
+    {
+      lastChar = char;
+      lastWord += char;
+    }
+    
+    if( i === queryString.length - 1 ) {
+      
+      lastValue += lastWord;
+      if( isShortcut ) {
+        queryParts.push({
+          category: null,
+          value: '#' + lastWord
+        });
+      } else if( queryParts.length > 0 ) {
+        queryParts[ queryParts.length - 1 ].value = this.stripValue( lastValue );
+      } else {
+        queryParts.push({
+          category: null,
+          value: this.stripValue( lastValue )
+        });
+      }
+    }
+  }
+
+  return new Query( queryParts );
+
+
+
+    /*
     while (true) {
       let lastPart: QueryPart;
       [lastPart, remainingQueryString] = this.popLastQueryPartFromString(categories, remainingQueryString);
@@ -38,36 +144,7 @@ export class QueryService {
       queryParts.unshift(lastPart);
     }
 
-    return new Query(queryParts);
-  }
-
-  /**
-   * Extracts the last query-part and returns it and the shortened query-string
-   *
-   * @param categories
-   * @param queryString
-   * @returns {[*,string]}
-   */
-  private popLastQueryPartFromString(categories: Array<QueryCategory>, queryString: string): [QueryPart, string] {
-
-    const lastPartRegexString = '([^\\s"\']*|("([^"]*)")|(\'([^\']*)\'))$';
-
-    // Try to match categories or the default category
-    for (const category of categories.concat([null])) {
-      const categoryPart = category ? category.name + this.categoryValueSeparator.trim() + '\\s*' : '';
-      const regexStr =  categoryPart + lastPartRegexString;
-      const regex = new RegExp(regexStr);
-      const match = queryString.trim().match(regex);
-
-      if (match && match[0].length > 0) {
-        // Pick the correct match to not have quotes in result string
-        const value = match[5] || match[3] || match[1] || '';
-        const queryPart = new QueryPart(category, value);
-        const remainingQueryString = queryString.trim().replace(regex, '').trim();
-        return [queryPart, remainingQueryString];
-      }
-    }
-    return [null, queryString.trim()];
+    return new Query(queryParts);*/
   }
 
   /**
@@ -77,9 +154,11 @@ export class QueryService {
    * @param queryString
    * @param appendPart
    */
+
   public appendQueryPartToQueryString(categories: Array<QueryCategory>, queryString: string, appendPart: QueryPart) {
     let lastPart: QueryPart, remainingQueryString: string;
-    [lastPart, remainingQueryString] = this.popLastQueryPartFromString(categories, queryString);
+    remainingQueryString = queryString;
+    lastPart = null;
 
     let newQuery;
 
@@ -115,6 +194,29 @@ export class QueryService {
     // Now that the current query is cleaned up, the actual append can start
     newQuery += (appendPart.category ? (appendPart.category.name + this.categoryValueSeparator) : '') + value;
     return newQuery;
+  }
+
+  /**
+   * Gets a queryPart value and strips it of exterior quotes and spaces
+   *
+   * @param value
+   * @returns {string}
+   */
+  public stripValue( value: string ): string {
+    
+    value = value.trim();
+    if( value[ 0 ] === '"' && value[ value.length - 1 ] === '"' &&
+      value.match( /(^|[^\\])"/g ).length === 2 ) {
+
+      value = value.substring( 1, value.length - 1 );
+    
+    } else if( value[ 0 ] === "'" && value[ value.length - 1 ] === "'" &&
+      value.match( /(^|[^\\])'/g ).length === 2 ) {
+
+      value = value.substring( 1, value.length - 1 );
+    }
+
+    return value;
   }
 
 }
