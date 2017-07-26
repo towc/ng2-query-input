@@ -1,5 +1,3 @@
-/* tslint:disable:no-unused-variable */
-
 import { TestBed, inject } from '@angular/core/testing';
 import { QueryService } from './query.service';
 import {QueryCategory} from './model/query-category';
@@ -7,9 +5,6 @@ import {Query} from './model/query';
 import {QueryPart} from './model/query-part';
 
 describe('QueryService', () => {
-
-  console.warn( 'BEGIN TEST: ' + new Date );
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [QueryService]
@@ -44,19 +39,23 @@ describe('QueryService', () => {
     expect(someQuery).not.toBeNull();
 
     // Check count of parts
-    expect(someQuery.parts.length).toEqual(4);
+    expect(someQuery.parts.length).toEqual(6);
 
     // Check categories and their order
     expect(someQuery.parts[0].category).toBe(someCategories[1]);
     expect(someQuery.parts[1].category).toBe(someCategories[0]);
     expect(someQuery.parts[2].category).toBe(someCategories[2]);
-    expect(someQuery.parts[3].category).toBe(someCategories[3]);
+    expect(someQuery.parts[3].category).toBeNull();
+    expect(someQuery.parts[4].category).toBeNull();
+    expect(someQuery.parts[5].category).toBe(someCategories[3]);
 
     // Check values
     expect(someQuery.parts[0].value).toEqual('Lorem');
     expect(someQuery.parts[1].value).toEqual('Ipsum');
-    expect(someQuery.parts[2].value).toEqual('Something with whitespaces');
-    expect(someQuery.parts[3].value).toEqual('Something in quotes');
+    expect(someQuery.parts[2].value).toEqual('Something');
+    expect(someQuery.parts[3].value).toEqual('with');
+    expect(someQuery.parts[4].value).toEqual('whitespaces');
+    expect(someQuery.parts[5].value).toEqual('Something in quotes');
   }));
 
   it('should not fail for empty input', inject([QueryService], (service: QueryService) => {

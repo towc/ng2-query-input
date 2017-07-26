@@ -27,7 +27,6 @@ export class QueryService {
   let lastChar = ''
     , lastWord = ''
     , lastValue = ''
-    , isShortcut = false
     , inQuotes = 0;
   for( var i = 0; i < queryString.length; ++i ) {
     var char = queryString[ i ];
@@ -50,11 +49,13 @@ export class QueryService {
       
       if( queryParts.length === 0 && lastValue ) {
         queryParts.push({
-          category: null, value:
-          this.stripValue( lastValue )
+          category: null,
+          value: this.stripValue( lastValue )
         });
         
-      } else if( queryParts.length > 0 && queryParts[ queryParts.length - 1 ].value[ 0 ] !== '#' ) {
+      } else if( queryParts.length > 0 && queryParts[ queryParts.length - 1 ].value === '' ) {
+
+        console.log( 3, queryParts );
         queryParts[ queryParts.length - 1 ].value = this.stripValue( lastValue );
         
       }
@@ -63,42 +64,40 @@ export class QueryService {
         category: categories.find( category => category.name === lastWord ) || { name: lastWord, description: '' },
         value: ''
       });
+
       lastWord = '';
       lastValue = '';
+      lastChar = char;
       
     } else
       
-    if( char === '#' && !inQuotes ) {
+    if( char === ' ' && !inQuotes && ', :'.indexOf( lastChar ) === -1 ) {
       
-      if( queryParts.length > 0 ) {
+      if( queryParts.length > 0 && queryParts[ queryParts.length - 1 ].value === '' ) {
+
+        lastValue += lastWord;
+        lastWord = '';
+
         queryParts[ queryParts.length - 1 ].value = this.stripValue( lastValue );
         lastValue = '';
+        debugger;
+
+      } else {
+
+        lastValue += lastWord + char;
         lastWord = '';
-      } else if( lastValue ) {
+
         queryParts.push({
           category: null,
           value: this.stripValue( lastValue )
         });
-      }
-      
-      isShortcut = true;
-    } else
-    
-    if( char === ' ' && !inQuotes ) {
-      
-      if( isShortcut ) {
-        queryParts.push({
-          category: null,
-          value: '#' + lastWord
-        });
-        lastWord = '';
         lastValue = '';
-        isShortcut = false;
-      } else {
-      
-        lastValue += lastWord + char;
-        lastWord = '';
+
+        debugger;
+
       }
+
+      lastChar = char;
     } else
     
     {
@@ -106,15 +105,10 @@ export class QueryService {
       lastWord += char;
     }
     
-    if( i === queryString.length - 1 ) {
+    if( i === queryString.length - 1 && char !== ' ' ) {
       
       lastValue += lastWord;
-      if( isShortcut ) {
-        queryParts.push({
-          category: null,
-          value: '#' + lastWord
-        });
-      } else if( queryParts.length > 0 ) {
+      if( queryParts.length > 0 && queryParts[ queryParts.length - 1 ].value === '' ) {
         queryParts[ queryParts.length - 1 ].value = this.stripValue( lastValue );
       } else {
         queryParts.push({
@@ -124,6 +118,8 @@ export class QueryService {
       }
     }
   }
+
+  debugger;
 
   return new Query( queryParts );
 
