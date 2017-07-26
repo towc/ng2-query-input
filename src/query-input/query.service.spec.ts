@@ -20,7 +20,7 @@ describe('QueryService', () => {
   someCategories.push(new QueryCategory('Five', 'The fifth of all'));
 
   // Create a dummy-query
-  const someQueryString = 'Two: Lorem One: Ipsum Three: Something with whitespaces Four: "Something in quotes"';
+  const someQueryString = 'Two: Lorem One: Ipsum Three: Something with whitespaces Four: "Something in quotes" Five:Something,in, commas';
 
   it('should be able to inject the service', inject([QueryService], (service: QueryService) => {
     expect(service).toBeTruthy();
@@ -39,7 +39,7 @@ describe('QueryService', () => {
     expect(someQuery).not.toBeNull();
 
     // Check count of parts
-    expect(someQuery.parts.length).toEqual(6);
+    expect(someQuery.parts.length).toEqual(7);
 
     // Check categories and their order
     expect(someQuery.parts[0].category).toBe(someCategories[1]);
@@ -48,6 +48,7 @@ describe('QueryService', () => {
     expect(someQuery.parts[3].category).toBeNull();
     expect(someQuery.parts[4].category).toBeNull();
     expect(someQuery.parts[5].category).toBe(someCategories[3]);
+    expect(someQuery.parts[6].category).toBe(someCategories[4]);
 
     // Check values
     expect(someQuery.parts[0].value).toEqual('Lorem');
@@ -56,6 +57,7 @@ describe('QueryService', () => {
     expect(someQuery.parts[3].value).toEqual('with');
     expect(someQuery.parts[4].value).toEqual('whitespaces');
     expect(someQuery.parts[5].value).toEqual('Something in quotes');
+    expect(someQuery.parts[6].value).toEqual('Something,in, commas');
   }));
 
   it('should not fail for empty input', inject([QueryService], (service: QueryService) => {
